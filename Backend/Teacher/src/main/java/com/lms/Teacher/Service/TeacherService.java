@@ -3,22 +3,21 @@ package com.lms.Teacher.Service;
 import com.lms.Teacher.client.TeacherServiceFeignClient;
 import com.lms.Teacher.dto.StudentInputDTO;
 import com.lms.Teacher.dto.TeacherInputDTO;
-import com.lms.Teacher.entity.Assignment;
 import com.lms.Teacher.entity.*;
 import com.lms.Teacher.Repository.*;
-import com.lms.Teacher.entity.Batch;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.stereotype.Service;
 
-import java.time.Instant;
 import java.time.LocalDateTime;
-import java.util.List;
 import java.util.ArrayList;
+import java.util.List;
+import java.util.Optional;
 
 @Service
 public class TeacherService {
+
     @Autowired
     private TeacherRepository teacherRepository;
 
@@ -41,217 +40,290 @@ public class TeacherService {
     private TeacherServiceFeignClient teacherServiceFeignClient;
 
     @Autowired
-    private assignmentSubmissionRepository subrepo;
+    private AssignmentSubmissionRepository submissionRepository;
 
     @Autowired
     private JavaMailSender javaMailSender;
 
-    private Instant LocalDateTime;
-
-
-    //Teacher Creates her account
+    /**
+     * Creates a new teacher account.
+     *
+     * @param teacher Input data for the teacher
+     * @return The created Teacher entity
+     */
     public Teacher createTeacher(TeacherInputDTO teacher) {
         Teacher newTeacher = new Teacher();
         newTeacher.setName(teacher.getName());
         newTeacher.setEmail(teacher.getEmail());
         newTeacher.setPwd(teacher.getPwd());
         newTeacher.setRole("Teacher");
-        teacherRepository.save(newTeacher);
-        return newTeacher;
+        return teacherRepository.save(newTeacher);
     }
 
-    // Teacher Updates her account
-    public Teacher updateTeacher(String teacherId, Teacher teacher)
-    {
-        Teacher existingTeacher = teacherRepository.findById(teacherId).orElse(null);
-        if (existingTeacher!=null) {
-            existingTeacher.setName(teacher.getName());
-            existingTeacher.setEmail(teacher.getEmail());
-            existingTeacher.setPwd(teacher.getPwd());
-            return teacherRepository.save(existingTeacher);
+    /**
+     * Updates a teacher's account details.
+     *
+     * @param teacherId The ID of the teacher to update
+     * @param teacher   Updated Teacher entity data
+     * @return The updated Teacher entity
+     */
+    public Teacher updateTeacher(String teacherId, Teacher teacher) {
+        Optional<Teacher> existingTeacher = teacherRepository.findById(teacherId);
+        if (existingTeacher.isPresent()) {
+            Teacher updatedTeacher = existingTeacher.get();
+            updatedTeacher.setName(teacher.getName());
+            updatedTeacher.setEmail(teacher.getEmail());
+            updatedTeacher.setPwd(teacher.getPwd());
+            return teacherRepository.save(updatedTeacher);
         }
-        return null;
+        throw new RuntimeException("Teacher not found with ID: " + teacherId);
     }
 
-    //Teacher can remover her/his account using teacher id
-    public Teacher deleteTeacher(String id){
-        Teacher existingTeacher = teacherRepository.findById(id).orElse(null);
-        if (existingTeacher!=null) {
-            teacherRepository.delete(existingTeacher);
-            return existingTeacher;
+    /**
+     * Deletes a teacher account by ID.
+     *
+     * @param id The ID of the teacher to delete
+     * @return The deleted Teacher entity, or null if not found
+     */
+    public Teacher deleteTeacher(String id) {
+        Optional<Teacher> existingTeacher = teacherRepository.findById(id);
+        if (existingTeacher.isPresent()) {
+            teacherRepository.delete(existingTeacher.get());
+            return existingTeacher.get();
         }
-        return null;
+        throw new RuntimeException("Teacher not found with ID: " + id);
     }
 
-    // Batch Methods
+    /**
+     * Creates a new class (batch) for the teacher.
+     *
+     * @param batchObj The Batch entity to create
+     * @return The created Batch entity
+     */
     public Batch createClass(Batch batchObj) {
         return classRepository.save(batchObj);
     }
 
+    /**
+     * Deletes a class (batch) by ID.
+     *
+     * @param batchId The ID of the batch to delete
+     * @return The deleted Batch entity
+     */
     public Batch deleteBatch(String batchId) {
-        Batch existingBatch = classRepository.findById(batchId).orElse(null);
-        if (existingBatch !=null) {
-            classRepository.delete(existingBatch);
-            return existingBatch;
+        Optional<Batch> existingBatch = classRepository.findById(batchId);
+        if (existingBatch.isPresent()) {
+            classRepository.delete(existingBatch.get());
+            return existingBatch.get();
         }
-        return null;
+        throw new RuntimeException("Batch not found with ID: " + batchId);
     }
 
+    /**
+     * Retrieves all classes (batches) by teacher ID.
+     *
+     * @param teacherId The ID of the teacher
+     * @return A list of Batch entities
+     */
     public List<Batch> getClassesByTeacherId(String teacherId) {
         return classRepository.findByTeacherId(teacherId);
     }
 
-    // Assignment Methods
-    //    public Assignment createAssignment(Assignment assignment) {
-    //        return assignmentRepository.save(assignment);
-    //    }
-
+    /**
+     * Creates a new assignment for a class.
+     *
+     * @param classId     The class ID the assignment belongs to
+     * @param title       The assignment title
+     * @param description The assignment description
+     * @param deadline    The deadline for the assignment
+     * @param fileLink    Link to the assignment file
+     * @return The created Assignment entity
+     */
     public Assignment createAssignment(String classId, String title, String description, LocalDateTime deadline, String fileLink) {
         Assignment assignment = new Assignment();
         assignment.setClassId(classId);
         assignment.setTitle(title);
         assignment.setDescription(description);
-        assignment.setCreationDate(java.time.LocalDateTime.from(java.time.LocalDateTime.now()));
+        assignment.setCreationDate(LocalDateTime.now());
         assignment.setDeadline(deadline);
         assignment.setFileLink(fileLink);
         return assignmentRepository.save(assignment);
     }
 
+    /**
+     * Retrieves all assignments for a given class ID.
+     *
+     * @param classId The class ID
+     * @return A list of Assignment entities
+     */
     public List<Assignment> getAssignmentsByClassId(String classId) {
         return assignmentRepository.findByClassId(classId);
     }
 
+    /**
+     * Retrieves all assignments for a teacher by teacher ID.
+     *
+     * @param teacherId The ID of the teacher
+     * @return A list of Assignment entities for all classes of the teacher
+     */
     public List<Assignment> getAssignmentsByTeacherId(String teacherId) {
-        List<Batch> batches = classRepository.findByTeacherId(teacherId);
+        List<Batch> batches = getClassesByTeacherId(teacherId);
         List<Assignment> assignments = new ArrayList<>();
-        for (Batch batchObj : batches) {
-            assignments.addAll(assignmentRepository.findByClassId(batchObj.getClassId()));
+        for (Batch batch : batches) {
+            assignments.addAll(assignmentRepository.findByClassId(batch.getClassId()));
         }
         return assignments;
     }
 
-    // Session methods
+    /**
+     * Creates a new session for a class.
+     *
+     * @param session The Session entity to create
+     * @return The created Session entity
+     */
     public Session createSession(Session session) {
         return sessionRepository.save(session);
     }
 
+    /**
+     * Retrieves all sessions for a given class ID.
+     *
+     * @param classId The class ID
+     * @return A list of Session entities
+     */
     public List<Session> getSessionsByClassId(String classId) {
         return sessionRepository.findByClassId(classId);
     }
 
+    /**
+     * Retrieves all sessions for a teacher by teacher ID.
+     *
+     * @param teacherId The ID of the teacher
+     * @return A list of Session entities for all classes of the teacher
+     */
     public List<Session> getSessionsByTeacherId(String teacherId) {
-        List<Batch> batches = classRepository.findByTeacherId(teacherId);
+        List<Batch> batches = getClassesByTeacherId(teacherId);
         List<Session> sessions = new ArrayList<>();
-        for (Batch batchObj : batches) {
-            sessions.addAll(sessionRepository.findByClassId(batchObj.getClassId()));
+        for (Batch batch : batches) {
+            sessions.addAll(sessionRepository.findByClassId(batch.getClassId()));
         }
         return sessions;
     }
 
-    // Material Methods
+    /**
+     * Creates a new material for a class.
+     *
+     * @param material The Material entity to create
+     * @return The created Material entity
+     */
     public Material createMaterial(Material material) {
         return materialRepository.save(material);
     }
 
+    /**
+     * Retrieves all materials for a given class ID.
+     *
+     * @param classId The class ID
+     * @return A list of Material entities
+     */
     public List<Material> getMaterialsByClassId(String classId) {
         return materialRepository.findByClassId(classId);
     }
 
+    /**
+     * Retrieves all materials for a teacher by teacher ID.
+     *
+     * @param teacherId The ID of the teacher
+     * @return A list of Material entities for all classes of the teacher
+     */
     public List<Material> getMaterialsByTeacherId(String teacherId) {
-        List<Batch> batches = classRepository.findByTeacherId(teacherId);
+        List<Batch> batches = getClassesByTeacherId(teacherId);
         List<Material> materials = new ArrayList<>();
-        for (Batch batchObj : batches) {
-            materials.addAll(materialRepository.findByClassId(batchObj.getClassId()));
+        for (Batch batch : batches) {
+            materials.addAll(materialRepository.findByClassId(batch.getClassId()));
         }
         return materials;
     }
 
-    // Video Methods
+    /**
+     * Creates a new video for a class.
+     *
+     * @param video The Video entity to create
+     * @return The created Video entity
+     */
     public Video createVideo(Video video) {
         return videoRepository.save(video);
     }
 
+    /**
+     * Retrieves all videos for a given class ID.
+     *
+     * @param classId The class ID
+     * @return A list of Video entities
+     */
     public List<Video> getVideosByClassId(String classId) {
         return videoRepository.findByClassId(classId);
     }
 
+    /**
+     * Retrieves all videos for a teacher by teacher ID.
+     *
+     * @param teacherId The ID of the teacher
+     * @return A list of Video entities for all classes of the teacher
+     */
     public List<Video> getVideosByTeacherId(String teacherId) {
-        List<Batch> batches = classRepository.findByTeacherId(teacherId);
+        List<Batch> batches = getClassesByTeacherId(teacherId);
         List<Video> videos = new ArrayList<>();
-        for (Batch batchObj : batches) {
-            videos.addAll(videoRepository.findByClassId(batchObj.getClassId()));
+        for (Batch batch : batches) {
+            videos.addAll(videoRepository.findByClassId(batch.getClassId()));
         }
         return videos;
     }
 
-    // Save a submission
+    /**
+     * Saves a student's assignment submission.
+     *
+     * @param assignmentId The ID of the assignment
+     * @param submission   The AssignmentSubmission entity to save
+     * @return The saved AssignmentSubmission entity
+     */
     public AssignmentSubmission saveSubmission(String assignmentId, AssignmentSubmission submission) {
         submission.setAssignmentId(assignmentId);
-        submission.setSubmittedAt(java.time.LocalDateTime.from(java.time.LocalDateTime.now()));
-        return subrepo.save(submission);
+        submission.setSubmittedAt(LocalDateTime.now());
+        return submissionRepository.save(submission);
     }
-//
-//    // Get all submissions by assignment ID
-//    public List<AssignmentSubmission> getSubmissionsByAssignmentId(String assignmentId) {
-//        return (List<AssignmentSubmission>) subrepo.findByAssignmentId(assignmentId);
-//    }
 
+    /**
+     * Retrieves all submissions for a given assignment ID.
+     *
+     * @param assignmentId The assignment ID
+     * @return A list of AssignmentSubmission entities
+     */
     public List<AssignmentSubmission> getSubmissionsByAssignmentId(String assignmentId) {
-        return subrepo.findByAssignmentId(assignmentId); // Make sure this returns a List<AssignmentSubmission>
+        return submissionRepository.findByAssignmentId(assignmentId);
     }
 
-
-//    // Method to register student and send email with credentials
-//    public Student registerStudent(Student student) {
-//        Student registeredStudent = teacherServiceFeignClient.registerStudent(student);
-//        sendRegistrationEmail(student.getEmail(), student.getPwd(), student.getClassId(), student.getName(), student.getStudentid());
-//        return registeredStudent;
-//    }
-//
-//    private void sendRegistrationEmail(String email, String password, String batch, String name, String id) {
-//        SimpleMailMessage mailMessage = new SimpleMailMessage();
-//        mailMessage.setFrom("edutech@lms.com");
-//        mailMessage.setTo(email);
-//        mailMessage.setSubject("Welcome to Edutech!");
-//        String emailContent = String.format(
-//                "Dear %s (ID : %s),\n\n" +
-//                        "You have been successfully added to class ID: %s at Edutech. We are excited to have you on board!\n\n" +
-//                        "Here are your login credentials for accessing the Edutech Learning Management System (LMS):\n\n" +
-//                        " - Username: %s\n" +
-//                        " - Password: %s\n\n" +
-//                        "You can access the LMS portal and Start Learning!\n\n" +
-//                        "Best Regards,\n" +
-//                        "Your LMS Team",
-//                name, id, batch, email, password);
-//
-//        mailMessage.setText(emailContent);
-//        javaMailSender.send(mailMessage);
-//    }
-//
-//    public List<Batch> getBatchByTeacherId(String teacherId) {
-//        return classRepository.findByTeacherId(teacherId);
-//    }
-//
-//    // Method to add a student to a class
-//    public Student addStudentToClass(String classId, StudentInputDTO studentDto) {
-//        // Create a new student object and set the classId
-//        Student student = new Student();
-//        student.setName(studentDto.getName());
-//        student.setEmail(studentDto.getEmail());
-//        student.setPwd(studentDto.getPwd());
-//        student.setClassId(classId);
-//
-//        // Call the Student microservice to register the student
-//        return teacherServiceFeignClient.registerStudent(student);
-//    }
-
-    // Method to register student and send email with credentials
+    /**
+     * Registers a new student and sends an email with login credentials.
+     *
+     * @param student The Student entity to register
+     * @return The registered Student entity
+     */
     public Student registerStudent(Student student) {
         Student registeredStudent = teacherServiceFeignClient.registerStudent(student);
-        sendRegistrationEmail(student.getEmail(), student.getPwd(), student.getClassId(), student.getName(), student.getStudentid());
+        sendRegistrationEmail(student.getEmail(), student.getPwd(), student.getClassName(), student.getName(), student.getStudentId());
         return registeredStudent;
     }
 
+    /**
+     * Sends a registration email to the student with their credentials.
+     *
+     * @param email    The student's email
+     * @param password The student's password
+     * @param batch    The batch (class) name
+     * @param name     The student's name
+     * @param id       The student's ID
+     */
     private void sendRegistrationEmail(String email, String password, String batch, String name, String id) {
         SimpleMailMessage mailMessage = new SimpleMailMessage();
         mailMessage.setFrom("edutech@lms.com");
@@ -259,11 +331,11 @@ public class TeacherService {
         mailMessage.setSubject("Welcome to Edutech!");
         String emailContent = String.format(
                 "Dear %s (ID : %s),\n\n" +
-                        "You have been successfully added to class ID: %s at Edutech. We are excited to have you on board!\n\n" +
+                        "You have been successfully added to Class: %s at Edutech. We are excited to have you on board!\n\n" +
                         "Here are your login credentials for accessing the Edutech Learning Management System (LMS):\n\n" +
                         " - Username: %s\n" +
                         " - Password: %s\n\n" +
-                        "You can access the LMS portal and Start Learning!\n\n" +
+                        "You can access the LMS portal and start learning!\n\n" +
                         "Best Regards,\n" +
                         "Your LMS Team",
                 name, id, batch, email, password);
@@ -272,29 +344,31 @@ public class TeacherService {
         javaMailSender.send(mailMessage);
     }
 
-    public List<Batch> getBatchByTeacherId(String teacherId) {
-        return classRepository.findByTeacherId(teacherId);
-    }
-
-    // Method to add a student to a class
+    /**
+     * Adds a student to a class and registers them.
+     *
+     * @param classId    The ID of the class
+     * @param studentDto The student input data
+     * @return The registered Student entity
+     */
     public Student addStudentToClass(String classId, StudentInputDTO studentDto) {
-        // Create a new student object and set the classId
         Student student = new Student();
         student.setName(studentDto.getName());
         student.setEmail(studentDto.getEmail());
         student.setPwd(studentDto.getPwd());
         student.setClassId(classId);
 
-        sendRegistrationEmail(student.getEmail(), student.getPwd(), classId, student.getName(), student.getStudentid());
+        sendRegistrationEmail(student.getEmail(), student.getPwd(), classId, student.getName(), student.getStudentId());
 
-        // Call the Student microservice to register the student
         return teacherServiceFeignClient.registerStudent(student);
-
     }
 
+    /**
+     * Deletes a student by their ID.
+     *
+     * @param studentId The ID of the student to delete
+     */
     public void deleteStudentById(String studentId) {
         teacherServiceFeignClient.deleteStudent(studentId);
     }
-
-
 }

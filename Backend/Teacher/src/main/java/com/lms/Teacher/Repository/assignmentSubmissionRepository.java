@@ -5,6 +5,6 @@ import org.springframework.data.mongodb.repository.MongoRepository;
 
 import java.util.List;
 
-public interface assignmentSubmissionRepository extends MongoRepository<AssignmentSubmission, String> {
+public interface AssignmentSubmissionRepository extends MongoRepository<AssignmentSubmission, String> {
     List<AssignmentSubmission> findByAssignmentId(String assignmentId);
 }

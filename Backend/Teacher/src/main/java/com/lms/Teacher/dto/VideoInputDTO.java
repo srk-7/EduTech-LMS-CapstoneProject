@@ -8,7 +8,8 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @Data
 
-public class VideoInputDTO {
+public class VideoInputDTO
+{
     private String title;
     private String description;
     private String link;

@@ -15,6 +15,4 @@ public class AssignmentInputDTO {
     private String description;
     private LocalDateTime deadline;
     private String fileLink;
-
-    // Getters and Setters
 }

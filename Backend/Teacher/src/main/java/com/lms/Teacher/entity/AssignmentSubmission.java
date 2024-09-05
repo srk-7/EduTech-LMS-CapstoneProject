@@ -13,7 +13,7 @@ import java.time.LocalDateTime;
 
 public class AssignmentSubmission {
     @Id
-    private String id; // MongoDB ID
+    private String id;
     private String studentId;
     private String studentName;
     private String assignmentId;

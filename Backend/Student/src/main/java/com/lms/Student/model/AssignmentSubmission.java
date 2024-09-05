@@ -15,6 +15,7 @@ public class AssignmentSubmission {
     @Id
     private String id;
     private String studentId;
+    private String studentName;
     private String assignmentId;
     private String submissionLink;
     private LocalDateTime submittedAt;

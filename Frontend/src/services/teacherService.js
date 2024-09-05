@@ -23,6 +23,7 @@ export const createClass = async (teacherId, classObj) => {
       },
       body: JSON.stringify(classObj),
   });
+  console.log(response);
 
   if (!response.ok) {
       throw new Error('Failed to create class');

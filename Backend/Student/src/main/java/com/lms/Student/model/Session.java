@@ -16,6 +16,7 @@ public class Session
 {
     private String sessionid;
     private String classId;
+    private String sessionName;
     private String sessionDate;
     private String sessionTime;
     private String sessionLink;

@@ -1,6 +1,9 @@
 import React, { useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { addStudentToClass } from '../services/teacherService';
+import { FaUserPlus, FaEnvelope, FaLock } from 'react-icons/fa'; // Icons for the form
+import { toast, ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 function AddStudent() {
     const { classId } = useParams(); // Get classId from the URL
@@ -14,48 +17,63 @@ function AddStudent() {
         try {
             const newStudent = { name, email, pwd: password };
             await addStudentToClass(classId, newStudent);
-            navigate(`/classes/${classId}`); // Redirect to the class page after adding the student
+            toast.success('Student added successfully!');
+            setTimeout(() => {
+                navigate(`/classes/${classId}`); // Redirect to the class page after adding the student
+            }, 2000);
         } catch (error) {
             console.error('Error adding student:', error);
-            // Handle error (e.g., show an error message)
+            toast.error('Failed to add student. Please try again.', { position: toast.POSITION.TOP_CENTER });
         }
     };
 
     return (
-        <div className="min-h-screen bg-gray-100 flex justify-center items-center">
-            <form onSubmit={handleAddStudent} className="bg-white p-8 rounded-lg shadow-lg">
-                <h1 className="text-2xl font-bold mb-6">Add Student to Class</h1>
-                <div className="mb-4">
-                    <label className="block text-gray-700">Name</label>
+        <div className="min-h-screen bg-gradient-to-r from-indigo-500 to-blue-400 flex justify-center items-center">
+            <ToastContainer />
+            <form onSubmit={handleAddStudent} className="bg-white p-8 rounded-lg shadow-lg w-full max-w-md">
+                <h1 className="text-3xl font-bold mb-6 text-center text-indigo-600">Add Student to Class</h1>
+
+                {/* Name Input */}
+                <div className="mb-4 flex items-center border-b-2 border-indigo-600 py-2">
+                    <FaUserPlus className="text-indigo-600 mr-3" />
                     <input
                         type="text"
                         value={name}
                         onChange={(e) => setName(e.target.value)}
-                        className="w-full px-4 py-2 border rounded-lg"
+                        className="appearance-none bg-transparent border-none w-full text-gray-700 py-1 px-2 leading-tight focus:outline-none"
+                        placeholder="Student Name"
                         required
                     />
                 </div>
-                <div className="mb-4">
-                    <label className="block text-gray-700">Email</label>
+
+                {/* Email Input */}
+                <div className="mb-4 flex items-center border-b-2 border-indigo-600 py-2">
+                    <FaEnvelope className="text-indigo-600 mr-3" />
                     <input
                         type="email"
                         value={email}
                         onChange={(e) => setEmail(e.target.value)}
-                        className="w-full px-4 py-2 border rounded-lg"
+                        className="appearance-none bg-transparent border-none w-full text-gray-700 py-1 px-2 leading-tight focus:outline-none"
+                        placeholder="Student Email"
                         required
                     />
                 </div>
-                <div className="mb-4">
-                    <label className="block text-gray-700">Password</label>
+
+                {/* Password Input */}
+                <div className="mb-4 flex items-center border-b-2 border-indigo-600 py-2">
+                    <FaLock className="text-indigo-600 mr-3" />
                     <input
                         type="password"
                         value={password}
                         onChange={(e) => setPassword(e.target.value)}
-                        className="w-full px-4 py-2 border rounded-lg"
+                        className="appearance-none bg-transparent border-none w-full text-gray-700 py-1 px-2 leading-tight focus:outline-none"
+                        placeholder="Password"
                         required
                     />
                 </div>
-                <button type="submit" className="w-full bg-blue-600 text-white py-2 px-4 rounded-lg">
+
+                {/* Submit Button */}
+                <button type="submit" className="w-full bg-indigo-600 hover:bg-indigo-700 text-white py-2 px-4 rounded-lg transition duration-300">
                     Add Student
                 </button>
             </form>

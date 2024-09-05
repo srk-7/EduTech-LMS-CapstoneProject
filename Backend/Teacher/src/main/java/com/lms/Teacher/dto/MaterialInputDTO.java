@@ -7,7 +7,9 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 @Data
-public class MaterialInputDTO {
+
+public class MaterialInputDTO
+{
     private String title;
     private String description;
     private String link;
