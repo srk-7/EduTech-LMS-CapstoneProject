@@ -14,7 +14,7 @@ import java.time.LocalTime;
 @AllArgsConstructor
 public class Session
 {
-    private String sessionid;
+    private String sessionId;
     private String classId;
     private String sessionName;
     private String sessionDate;

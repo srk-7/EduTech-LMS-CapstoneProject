@@ -14,4 +14,5 @@ public class SessionsDTO {
     public String name;
     public String classId;
     public List<Session> sessions;
+
 }

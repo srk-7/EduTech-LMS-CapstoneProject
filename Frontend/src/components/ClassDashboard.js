@@ -16,8 +16,11 @@ import {
     FaBook,
     FaChalkboardTeacher,
     FaPlus,
-    FaUpload,
-    FaClipboardList
+    FaClipboardList,
+    FaFolderOpen,
+    FaRegPlayCircle,
+    FaBars, // Hamburger icon
+    FaTimes // Close icon
 } from 'react-icons/fa';
 
 function ClassDashboard() {
@@ -27,6 +30,7 @@ function ClassDashboard() {
     const [materialCount, setMaterialCount] = useState(0);
     const [videoCount, setVideoCount] = useState(0);
     const [sessionCount, setSessionCount] = useState(0);
+    const [sidebarOpen, setSidebarOpen] = useState(false); // Sidebar state
 
     useEffect(() => {
         const fetchCounts = async () => {
@@ -53,58 +57,53 @@ function ClassDashboard() {
         fetchCounts();
     }, [classId]);
 
+    // Toggle the sidebar visibility
+    const toggleSidebar = () => {
+        setSidebarOpen(!sidebarOpen);
+    };
+
     return (
-        <div className="min-h-screen flex bg-gray-100">
+        <div className="min-h-screen flex bg-gray-50">
+            {/* Hamburger Menu */}
+            <button onClick={toggleSidebar} className="fixed top-4 left-4 z-20 text-3xl text-blue-600">
+                {sidebarOpen ? <FaTimes /> : <FaBars />}
+            </button>
+
             {/* Sidebar */}
-            <div className="fixed top-0 left-0 h-full bg-blue-600 w-20 hover:w-56 transition-all duration-300 ease-in-out overflow-hidden shadow-lg z-10">
-                <div className="flex flex-col items-center space-y-8 p-4 pt-24">
-                    <Link to={`/classes/${classId}/upload-assignment`} className="group flex items-center space-x-3">
-                        <FaUpload className="text-white text-3xl group-hover:text-yellow-400 transition-all" />
-                        <span className="text-white opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-                            Upload Assignment
-                        </span>
+            <div
+                className={`fixed top-0 left-0 h-full bg-white w-56 shadow-lg z-10 transform ${
+                    sidebarOpen ? 'translate-x-0' : '-translate-x-full'
+                } transition-transform duration-300 ease-in-out`}
+            >
+                <div className="flex flex-col items-center space-y-8 p-6 pt-24">
+                    <Link to={`/classes/${classId}/upload-assignment`} className="flex items-center space-x-4 w-full">
+                        <FaFileAlt className="text-blue-600 text-3xl" />
+                        <span className="text-gray-800 font-semibold">Upload Assignment</span>
                     </Link>
 
-                    <Link to={`/classes/${classId}/upload-material`} className="group flex items-center space-x-3">
-                        <FaUpload className="text-white text-3xl group-hover:text-yellow-400 transition-all" />
-                        <span className="text-white opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-                            Upload Material
-                        </span>
+                    <Link to={`/classes/${classId}/upload-material`} className="flex items-center space-x-4 w-full">
+                        <FaFolderOpen className="text-blue-600 text-3xl" />
+                        <span className="text-gray-800 font-semibold">Upload Material</span>
                     </Link>
 
-                    <Link to={`/classes/${classId}/upload-video`} className="group flex items-center space-x-3">
-                        <FaVideo className="text-white text-3xl group-hover:text-yellow-400 transition-all" />
-                        <span className="text-white opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-                            Upload Video
-                        </span>
+                    <Link to={`/classes/${classId}/upload-video`} className="flex items-center space-x-4 w-full">
+                        <FaRegPlayCircle className="text-blue-600 text-3xl" />
+                        <span className="text-gray-800 font-semibold">Upload Video</span>
                     </Link>
 
-                    <Link to={`/classes/${classId}/upload-session`} className="group flex items-center space-x-3">
-                        <FaChalkboardTeacher className="text-white text-3xl group-hover:text-yellow-400 transition-all" />
-                        <span className="text-white opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-                            Create Session
-                        </span>
+                    <Link to={`/classes/${classId}/upload-session`} className="flex items-center space-x-4 w-full">
+                        <FaChalkboardTeacher className="text-blue-600 text-3xl" />
+                        <span className="text-gray-800 font-semibold">Create Session</span>
                     </Link>
 
-                    <Link to={`/classes/${classId}/add-student`} className="group flex items-center space-x-3">
-                        <FaPlus className="text-white text-3xl group-hover:text-yellow-400 transition-all" />
-                        <span className="text-white opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-                            Add Student
-                        </span>
+                    <Link to={`/classes/${classId}/add-student`} className="flex items-center space-x-4 w-full">
+                        <FaPlus className="text-blue-600 text-3xl" />
+                        <span className="text-gray-800 font-semibold">Add Student</span>
                     </Link>
 
-                    <Link to={`/classes/${classId}/view-submissions`} className="group flex items-center space-x-3">
-                        <FaFileAlt className="text-white text-3xl group-hover:text-yellow-400 transition-all" />
-                        <span className="text-white opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-                            View Submissions
-                        </span>
-                    </Link>
-
-                    <Link to={`/classes/${classId}/mark-attendance`} className="group flex items-center space-x-3">
-                        <FaClipboardList className="text-white text-3xl group-hover:text-yellow-400 transition-all" />
-                        <span className="text-white opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-                            Mark Attendance
-                        </span>
+                    <Link to={`/classes/${classId}/view-submissions`} className="flex items-center space-x-4 w-full">
+                        <FaClipboardList className="text-blue-600 text-3xl" />
+                        <span className="text-gray-800 font-semibold">View Submissions</span>
                     </Link>
                 </div>
             </div>

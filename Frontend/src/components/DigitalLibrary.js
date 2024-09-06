@@ -1,5 +1,8 @@
 import React, { useState } from 'react';
 import Navbar from './Navbar';
+import BackButton from './BackButton'; // Import the BackButton component
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faSearch, faVideo } from '@fortawesome/free-solid-svg-icons'; // Import icons
 
 function DigitalLibrary() {
     const [searchQuery, setSearchQuery] = useState('');
@@ -27,7 +30,13 @@ function DigitalLibrary() {
         <div className="min-h-screen bg-gradient-to-b from-gray-100 to-blue-50">
             <Navbar />
             <div className="p-8">
-                <h1 className="text-4xl font-bold text-blue-600 mb-10 text-center">Digital Library</h1>
+                <div className="mb-6">
+                    <BackButton /> 
+                </div>
+                <h1 className="text-4xl font-bold text-blue-600 mb-10 text-center">
+                    <FontAwesomeIcon icon={faVideo} className="mr-3" />
+                    Digital Library
+                </h1>
                 <form onSubmit={handleSearch} className="mb-12 max-w-xl mx-auto">
                     <div className="flex items-center space-x-4">
                         <input
@@ -40,8 +49,9 @@ function DigitalLibrary() {
                         />
                         <button
                             type="submit"
-                            className="bg-blue-600 hover:bg-blue-700 text-white py-3 px-6 rounded-lg font-semibold transition duration-300 ease-in-out shadow-lg"
+                            className="bg-blue-600 hover:bg-blue-700 text-white py-3 px-6 rounded-lg font-semibold transition duration-300 ease-in-out shadow-lg flex items-center"
                         >
+                            <FontAwesomeIcon icon={faSearch} className="mr-2" />
                             Search
                         </button>
                     </div>

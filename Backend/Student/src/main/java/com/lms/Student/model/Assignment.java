@@ -16,4 +16,5 @@ public class Assignment {
     private String description;
     private LocalDateTime creationDate;
     private LocalDateTime deadline;
+    private String fileLink;
 }
