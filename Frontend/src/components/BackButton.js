@@ -1,15 +1,17 @@
-// src/components/BackButton.js
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faArrowLeft } from '@fortawesome/free-solid-svg-icons';
 
 function BackButton() {
     const navigate = useNavigate();
 
     return (
         <button
-            onClick={() => navigate(-1)}  // Navigate back to the previous page
-            className="bg-gray-600 text-white px-4 py-2 rounded-md hover:bg-gray-700 transition duration-200"
+            onClick={() => navigate(-1)}
+            className="text-blue-600 hover:text-blue-800 transition duration-200 ease-in-out flex items-center"
         >
+            <FontAwesomeIcon icon={faArrowLeft} className="mr-2" />
             Back
         </button>
     );

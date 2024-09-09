@@ -14,4 +14,5 @@ public class StudentInputDTO
     private String email;
     private String pwd;
     private String classId;
+    private String className;
 }

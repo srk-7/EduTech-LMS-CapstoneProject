@@ -3,6 +3,8 @@ import { useParams, useNavigate } from 'react-router-dom';
 import { createMaterial } from '../services/teacherService';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faBook, faLink, faEdit } from '@fortawesome/free-solid-svg-icons';
+import { ToastContainer, toast } from 'react-toastify'; // Import toast and ToastContainer
+import 'react-toastify/dist/ReactToastify.css'; // Import toastify styles
 
 function UploadMaterial() {
     const { classId } = useParams();
@@ -16,11 +18,11 @@ function UploadMaterial() {
         try {
             const materialData = { title, description, link };
             await createMaterial(classId, materialData);
-            alert('Material uploaded successfully!');
-            navigate(`/classes/${classId}`);
+            toast.success('Material uploaded successfully!'); // Success toast
+            setTimeout(() => navigate(`/classes/${classId}`), 2000); // Redirect after delay
         } catch (error) {
             console.error('Error uploading material:', error);
-            alert('Failed to upload material.');
+            toast.error('Failed to upload material. Please try again.'); // Error toast
         }
     };
 
@@ -70,6 +72,8 @@ function UploadMaterial() {
                     Upload Material
                 </button>
             </form>
+
+            <ToastContainer />
         </div>
     );
 }

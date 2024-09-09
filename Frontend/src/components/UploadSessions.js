@@ -3,6 +3,8 @@ import { useParams, useNavigate } from 'react-router-dom';
 import { createSession } from '../services/teacherService';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faVideo, faClock, faCalendarAlt, faLink, faInfoCircle } from '@fortawesome/free-solid-svg-icons';
+import { ToastContainer, toast } from 'react-toastify'; // Import toast and ToastContainer
+import 'react-toastify/dist/ReactToastify.css'; // Import toastify styles
 
 function UploadSession() {
     const { classId } = useParams();
@@ -25,11 +27,11 @@ function UploadSession() {
 
         try {
             await createSession(classId, sessionData);
-            alert('Session created successfully!');
-            navigate(`/classes/${classId}`);
+            toast.success('Session created successfully!'); // Success toast
+            setTimeout(() => navigate(`/classes/${classId}`), 2000); // Redirect after delay
         } catch (error) {
             console.error('Error creating session:', error);
-            alert('Failed to create session. Please try again.');
+            toast.error('Failed to create session. Please try again.'); // Error toast
         }
     };
 
@@ -106,6 +108,9 @@ function UploadSession() {
                     Create Session
                 </button>
             </form>
+
+            {/* ToastContainer to display toasts */}
+            <ToastContainer />
         </div>
     );
 }

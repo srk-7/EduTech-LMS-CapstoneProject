@@ -3,6 +3,8 @@ import { useParams, useLocation, useNavigate } from 'react-router-dom';
 import { createAssignment } from '../services/teacherService';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faFileAlt, faCalendarAlt, faFileUpload, faClipboardList } from '@fortawesome/free-solid-svg-icons';
+import { ToastContainer, toast } from 'react-toastify'; // Import toast and ToastContainer
+import 'react-toastify/dist/ReactToastify.css'; // Import toastify styles
 
 function UploadAssignment() {
     const { classId: urlClassId } = useParams();
@@ -28,11 +30,11 @@ function UploadAssignment() {
         try {
             await createAssignment(classId, assignmentData);
             if (incrementAssignments) incrementAssignments();
-            alert('Assignment created successfully!');
-            navigate(`/classes/${classId}`);
+            toast.success('Assignment created successfully!'); // Success toast
+            setTimeout(() => navigate(`/classes/${classId}`), 2000); // Redirect after delay
         } catch (error) {
             console.error('Error creating assignment:', error);
-            alert('Failed to create assignment. Please try again.');
+            toast.error('Failed to create assignment. Please try again.'); // Error toast
         }
     };
 
@@ -105,6 +107,8 @@ function UploadAssignment() {
                     Create Assignment
                 </button>
             </form>
+
+            <ToastContainer />
         </div>
     );
 }

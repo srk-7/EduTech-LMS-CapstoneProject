@@ -176,6 +176,20 @@ public class TeacherService {
     }
 
     /**
+     * Deletes an assignment by its ID.
+     *
+     * @param assignmentId The ID of the assignment to delete
+     */
+    public void deleteAssignmentById(String assignmentId) {
+        Optional<Assignment> assignment = assignmentRepository.findById(assignmentId);
+        if (assignment.isPresent()) {
+            assignmentRepository.deleteById(assignmentId);
+        } else {
+            throw new RuntimeException("Assignment not found with ID: " + assignmentId);
+        }
+    }
+
+    /**
      * Creates a new session for a class.
      *
      * @param session The Session entity to create
@@ -210,6 +224,16 @@ public class TeacherService {
         return sessions;
     }
 
+    public void deleteSessionById(String sessionId) {
+        Optional<Session> existingSession = sessionRepository.findById(sessionId);
+        if (existingSession.isPresent()) {
+            sessionRepository.deleteById(sessionId);
+        } else {
+            throw new RuntimeException("Session not found with ID: " + sessionId);
+        }
+    }
+
+
     /**
      * Creates a new material for a class.
      *
@@ -243,6 +267,15 @@ public class TeacherService {
             materials.addAll(materialRepository.findByClassId(batch.getClassId()));
         }
         return materials;
+    }
+
+    public void deleteMaterialById(String materialId) {
+        Optional<Material> existingMaterial = materialRepository.findById(materialId);
+        if (existingMaterial.isPresent()) {
+            materialRepository.deleteById(materialId);
+        } else {
+            throw new RuntimeException("Material not found with ID: " + materialId);
+        }
     }
 
     /**
@@ -280,6 +313,16 @@ public class TeacherService {
         return videos;
     }
 
+    public void deleteVideoById(String videoId) {
+        Optional<Video> existingVideo = videoRepository.findById(videoId);
+        if (existingVideo.isPresent()) {
+            videoRepository.deleteById(videoId);
+        } else {
+            throw new RuntimeException("Video not found with ID: " + videoId);
+        }
+    }
+
+
     /**
      * Saves a student's assignment submission.
      *
@@ -311,7 +354,7 @@ public class TeacherService {
      */
     public Student registerStudent(Student student) {
         Student registeredStudent = teacherServiceFeignClient.registerStudent(student);
-        sendRegistrationEmail(student.getEmail(), student.getPwd(), student.getClassName(), student.getName(), student.getStudentId());
+        // sendRegistrationEmail(student.getEmail(), student.getPwd(), student.getClassName(), student.getName(), student.getStudentId());
         return registeredStudent;
     }
 
@@ -357,8 +400,9 @@ public class TeacherService {
         student.setEmail(studentDto.getEmail());
         student.setPwd(studentDto.getPwd());
         student.setClassId(classId);
+        student.setClassName(studentDto.getClassName());
 
-        sendRegistrationEmail(student.getEmail(), student.getPwd(), classId, student.getName(), student.getStudentId());
+         // sendRegistrationEmail(student.getEmail(), student.getPwd(), classId, student.getName(), student.getStudentId());
 
         return teacherServiceFeignClient.registerStudent(student);
     }

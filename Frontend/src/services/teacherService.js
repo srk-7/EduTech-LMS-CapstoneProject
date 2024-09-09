@@ -213,3 +213,45 @@ export const deleteStudent = async (studentId) => {
         throw new Error('Failed to delete student');
     }
 };
+
+export const deleteMaterial = async (materialId) => {
+    const response = await fetch(`http://localhost:8081/api/teachers/materials/${materialId}`, {
+        method: 'DELETE',
+    });
+  
+    if (!response.ok) {
+        throw new Error('Failed to delete material');
+    }
+};
+
+  export const deleteSession = async (sessionId) => {
+    const response = await fetch(`http://localhost:8081/api/teachers/sessions/${sessionId}`, {
+        method: 'DELETE',
+    });
+  
+    if (!response.ok) {
+        throw new Error('Failed to delete session');
+    }
+};
+
+
+export const deleteVideo = async (videoId) => {
+    const response = await fetch(`http://localhost:8081/api/teachers/videos/${videoId}`, {
+        method: 'DELETE',
+    });
+  
+    if (!response.ok) {
+        throw new Error('Failed to delete video');
+    }
+};
+
+export const deleteAssignment = async (assignmentId) => {
+    const response = await fetch(`http://localhost:8081/api/teachers/assignments/${assignmentId}`, {
+        method: 'DELETE',
+    });
+  
+    if (!response.ok) {
+        throw new Error('Failed to delete assignment');
+    }
+  };
+  

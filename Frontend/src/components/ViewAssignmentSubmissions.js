@@ -28,9 +28,9 @@ function ViewAssignmentSubmissions() {
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                     {submissions.map((submission) => (
                         <div key={submission.id} className="bg-white p-6 rounded-lg shadow-lg transform transition duration-300 hover:scale-105 hover:shadow-xl">
-                            <h2 className="text-2xl font-bold mb-2 text-indigo-700 flex items-center">
+                            <h1 className="text-2xl font-bold mb-2 text-indigo-700 flex items-center">
                                 <FontAwesomeIcon icon={faFileAlt} className="mr-2" /> {submission.studentName}
-                            </h2>
+                            </h1>
                             <p className="text-sm text-gray-500 flex items-center mb-4">
                                 <FontAwesomeIcon icon={faClock} className="mr-2" />
                                 Submitted at: {new Date(submission.submittedAt).toLocaleString()}

@@ -121,6 +121,24 @@ public class TeacherController {
         return ResponseEntity.ok(assignment);
     }
 
+    @DeleteMapping("/materials/{materialId}")
+    public ResponseEntity<Void> deleteMaterial(@PathVariable String materialId) {
+        teacherService.deleteMaterialById(materialId);
+        return ResponseEntity.noContent().build();
+    }
+
+    @DeleteMapping("/sessions/{sessionId}")
+    public ResponseEntity<Void> deleteSession(@PathVariable String sessionId) {
+        teacherService.deleteSessionById(sessionId);
+        return ResponseEntity.noContent().build();
+    }
+
+    @DeleteMapping("/videos/{videoId}")
+    public ResponseEntity<Void> deleteVideo(@PathVariable String videoId) {
+        teacherService.deleteVideoById(videoId);
+        return ResponseEntity.noContent().build();
+    }
+
 
     /**
      * Retrieves all assignments for a teacher.
@@ -144,6 +162,17 @@ public class TeacherController {
     public ResponseEntity<List<Assignment>> getAssignmentsByClassId(@PathVariable String classId) {
         List<Assignment> assignments = teacherService.getAssignmentsByClassId(classId);
         return ResponseEntity.ok(assignments);
+    }
+    /**
+     * Deletes an assignment by its ID.
+     *
+     * @param assignmentId The ID of the assignment to delete
+     * @return A response entity indicating success or failure
+     */
+    @DeleteMapping("/assignments/{assignmentId}")
+    public ResponseEntity<Void> deleteAssignment(@PathVariable String assignmentId) {
+        teacherService.deleteAssignmentById(assignmentId);
+        return ResponseEntity.noContent().build();
     }
 
     /**

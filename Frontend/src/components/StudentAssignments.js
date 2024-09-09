@@ -4,7 +4,7 @@ import { getAssignmentsForStudent } from '../services/studentService';
 import Navbar from './Navbar';
 import BackButton from './BackButton'; // Import BackButton
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faClipboard } from '@fortawesome/free-solid-svg-icons';
+import { faClipboard, faCalendarAlt, faFileAlt, faInfoCircle } from '@fortawesome/free-solid-svg-icons';
 
 function StudentAssignments() {
     const { studentId } = useParams();
@@ -14,7 +14,6 @@ function StudentAssignments() {
         const fetchData = async () => {
             try {
                 const data = await getAssignmentsForStudent(studentId);
-                console.log('Fetched Assignments:', data); // Log the fetched assignments
                 setAssignments(data.assignments || []);
             } catch (error) {
                 console.error('Error fetching assignments:', error);
@@ -31,7 +30,7 @@ function StudentAssignments() {
                 <div className="mb-6">
                     <BackButton /> {/* BackButton */}
                 </div>
-                <h1 className="text-3xl font-bold mb-6 flex items-center">
+                <h1 className="text-3xl font-bold mb-6 flex items-center text-blue-600">
                     <FontAwesomeIcon icon={faClipboard} className="mr-3 text-blue-600" />
                     Your Assignments
                 </h1>
@@ -39,9 +38,16 @@ function StudentAssignments() {
                     {assignments.length > 0 ? (
                         assignments.map((assignment) => (
                             <div key={assignment.assignmentId} className="bg-white p-6 rounded-lg shadow-lg hover:shadow-xl transition-transform transform hover:scale-105">
-                                <h2 className="text-xl font-semibold text-indigo-600 mb-2">{assignment.title}</h2>
-                                <p className="text-gray-700 mb-4">{assignment.description}</p>
-                                <p className="text-gray-600 mb-4">Due: {new Date(assignment.deadline).toLocaleString()}</p>
+                                <h2 className="text-xl font-semibold text-indigo-600 mb-2 flex items-center">
+                                    <FontAwesomeIcon icon={faFileAlt} className="mr-2 text-indigo-600" />
+                                    {assignment.title}
+                                </h2>
+                                <p className="text-gray-700 mb-5">
+                                    <FontAwesomeIcon icon={faInfoCircle} className="mr-2 text-gray-500" />{assignment.description}</p>
+                                <p className="text-gray-600 mb-4 flex items-center">
+                                    <FontAwesomeIcon icon={faCalendarAlt} className="mr-2 text-gray-500" />
+                                    Due Date: {new Date(assignment.deadline).toLocaleDateString()}
+                                </p>
                                 {assignment.fileLink ? (
                                     <a
                                         href={assignment.fileLink} // Use the fileLink from the backend response

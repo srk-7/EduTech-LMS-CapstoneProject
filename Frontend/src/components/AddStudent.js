@@ -23,7 +23,7 @@ function AddStudent() {
             }, 2000);
         } catch (error) {
             console.error('Error adding student:', error);
-            toast.error('Failed to add student. Please try again.', { position: toast.POSITION.TOP_CENTER });
+            toast.error('Failed to add student. Please try again.');
         }
     };
 

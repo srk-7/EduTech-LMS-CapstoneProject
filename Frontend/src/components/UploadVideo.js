@@ -3,6 +3,8 @@ import { useParams, useNavigate } from 'react-router-dom';
 import { createVideo } from '../services/teacherService';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faVideo, faLink, faEdit } from '@fortawesome/free-solid-svg-icons';
+import { ToastContainer, toast } from 'react-toastify'; // Import toast and ToastContainer
+import 'react-toastify/dist/ReactToastify.css'; // Import toastify styles
 
 function UploadVideo() {
     const { classId: paramClassId } = useParams();
@@ -30,17 +32,17 @@ function UploadVideo() {
         e.preventDefault();
         try {
             if (!classId) {
-                alert('Class ID is missing. Please try again.');
+                toast.error('Class ID is missing. Please try again.'); // Error toast
                 return;
             }
 
             const videoData = { title, description, link };
             await createVideo(classId, videoData);
-            alert('Video uploaded successfully!');
-            navigate(`/classes/${classId}`);
+            toast.success('Video uploaded successfully!'); // Success toast
+            setTimeout(() => navigate(`/classes/${classId}`), 2000); // Redirect after delay
         } catch (error) {
             console.error('Error uploading video:', error);
-            alert('Failed to upload video.');
+            toast.error('Failed to upload video.'); // Error toast
         }
     };
 
@@ -87,6 +89,9 @@ function UploadVideo() {
                     Upload Video
                 </button>
             </form>
+
+            {/* ToastContainer to display toasts */}
+            <ToastContainer />
         </div>
     );
 }
