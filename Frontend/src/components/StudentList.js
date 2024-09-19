@@ -6,6 +6,7 @@ import { faTrashAlt } from '@fortawesome/free-solid-svg-icons';
 import Navbar from './Navbar';
 import { ToastContainer, toast } from 'react-toastify'; // Import toast and ToastContainer
 import 'react-toastify/dist/ReactToastify.css'; // Import toastify styles
+import BackButton from './BackButton';
 
 function StudentList() {
     const { classId } = useParams();
@@ -56,6 +57,9 @@ function StudentList() {
         <>
         <Navbar />
         <div className="p-8 bg-gray-100 min-h-screen">
+            <div className="mb-6">
+                <BackButton />
+            </div>
             <h1 className="text-4xl font-bold mb-8 text-center text-blue-600">Students</h1>
             {students.length > 0 ? (
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">

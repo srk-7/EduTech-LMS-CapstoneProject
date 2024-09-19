@@ -3,6 +3,7 @@ import { useParams } from 'react-router-dom';
 import { getSubmissionsByAssignmentId } from '../services/teacherService';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faUser, faExternalLinkAlt, faClock } from '@fortawesome/free-solid-svg-icons';
+import BackButton from './BackButton';
 
 function AssignmentSubmissions() {
     const { assignmentId } = useParams();
@@ -23,6 +24,9 @@ function AssignmentSubmissions() {
 
     return (
         <div className="min-h-screen bg-gradient-to-r from-blue-50 to-indigo-100 p-8">
+            <div className="mb-6">
+                    <BackButton />
+            </div>
             <h1 className="text-4xl font-bold mb-6 text-center text-indigo-600">Assignment Submissions</h1>
             {submissions.length > 0 ? (
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">

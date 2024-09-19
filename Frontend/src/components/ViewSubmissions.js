@@ -4,6 +4,7 @@ import { useParams, Link } from 'react-router-dom';
 import { getAssignmentsByClassId } from '../services/teacherService';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faBook, faChevronRight } from '@fortawesome/free-solid-svg-icons';
+import BackButton from './BackButton';
 
 function ViewSubmissions() {
     const { classId } = useParams();
@@ -31,6 +32,9 @@ function ViewSubmissions() {
         <>
             <Navbar />
             <div className="min-h-screen bg-gradient-to-r from-blue-50 to-indigo-100 p-8">
+                <div className="mb-6">
+                    <BackButton />
+                </div>
                 <h1 className="text-4xl font-bold mb-6 text-center text-indigo-600">View Submissions</h1>
                 <div className="bg-white p-6 rounded-lg shadow-lg max-w-4xl mx-auto">
                     <h2 className="text-2xl font-semibold mb-4 text-indigo-700 flex items-center">

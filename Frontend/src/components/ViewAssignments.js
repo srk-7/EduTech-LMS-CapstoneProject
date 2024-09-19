@@ -6,6 +6,7 @@ import { faTrashAlt, faClipboardList, faCalendarAlt, faInfoCircle } from '@forta
 import Navbar from './Navbar';
 import { ToastContainer, toast } from 'react-toastify'; // Import Toast for notifications
 import 'react-toastify/dist/ReactToastify.css'; // Import Toast CSS
+import BackButton from './BackButton';
 
 function ViewAssignments() {
     const { classId } = useParams();
@@ -54,6 +55,9 @@ function ViewAssignments() {
         <>
             <Navbar />
             <div className="p-8 bg-gray-100 min-h-screen">
+                <div className="mb-6">
+                    <BackButton />
+                </div>
                 <h1 className="text-3xl font-bold mb-6 text-center text-indigo-600">
                     <FontAwesomeIcon className="mr-2" />
                     Assignments Assigned

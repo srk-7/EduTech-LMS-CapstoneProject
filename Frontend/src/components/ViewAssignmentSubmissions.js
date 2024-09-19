@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faFileAlt, faClock, faExternalLinkAlt } from '@fortawesome/free-solid-svg-icons';
+import BackButton from './BackButton';
 
 function ViewAssignmentSubmissions() {
     const { assignmentId } = useParams();
@@ -23,7 +24,9 @@ function ViewAssignmentSubmissions() {
 
     return (
         <div className="min-h-screen bg-gradient-to-r from-blue-50 to-indigo-100 p-8">
+
             <h1 className="text-4xl font-bold mb-6 text-center text-indigo-600">Assignment Submissions</h1>
+            
             {submissions.length > 0 ? (
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                     {submissions.map((submission) => (

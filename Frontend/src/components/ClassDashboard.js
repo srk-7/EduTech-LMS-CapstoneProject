@@ -8,6 +8,7 @@ import {
     getVideosByClassId,
     getSessionsByClassId
 } from '../services/teacherService'; // Assume these service calls are already implemented
+import BackButton from './BackButton';
 
 import {
     FaUserGraduate,
@@ -112,6 +113,10 @@ function ClassDashboard() {
             <div className="flex-grow ml-20">
                 <Navbar />
                 <div className="p-8">
+                    
+                <div className="mb-1">
+                    <BackButton /> 
+                </div>
                     <center>
                         <h1 className="text-4xl font-bold mb-10 text-gray-800">Class Dashboard</h1>
                     </center>

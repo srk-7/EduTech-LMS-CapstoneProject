@@ -81,6 +81,7 @@ import { getSessionsByClassId, deleteSession } from '../services/teacherService'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faCalendarAlt, faClock, faInfoCircle, faVideo, faLink, faTrashAlt } from '@fortawesome/free-solid-svg-icons';
 import Navbar from './Navbar';
+import BackButton from './BackButton';
 
 function ViewSessions() {
     const { classId } = useParams();
@@ -112,6 +113,9 @@ function ViewSessions() {
         <>
             <Navbar />
             <div className="p-8 bg-gradient-to-r from-blue-50 to-indigo-100 min-h-screen">
+                <div className="mb-6">
+                    <BackButton />
+                </div>
                 <h1 className="text-4xl font-bold mb-6 text-center text-indigo-600">Upcoming Sessions</h1>
                 {sessions.length > 0 ? (
                     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">

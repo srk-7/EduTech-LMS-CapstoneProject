@@ -6,6 +6,8 @@ import { faBook, faLink, faEdit } from '@fortawesome/free-solid-svg-icons';
 import { ToastContainer, toast } from 'react-toastify'; // Import toast and ToastContainer
 import 'react-toastify/dist/ReactToastify.css'; // Import toastify styles
 
+import BackButton from './BackButton';
+
 function UploadMaterial() {
     const { classId } = useParams();
     const navigate = useNavigate();
@@ -27,8 +29,11 @@ function UploadMaterial() {
     };
 
     return (
-        <div className="p-8 bg-gradient-to-r from-green-50 to-yellow-100 min-h-screen">
-            <h1 className="text-4xl font-bold mb-6 text-center text-yellow-600">Upload Material</h1>
+        <div className="p-8 bg-gradient-to-r from-green-50 to-blue-100 min-h-screen">
+            <div className="mb-6">
+                    <BackButton />
+            </div>
+            <h1 className="text-4xl font-bold mb-6 text-center text-blue-600">Upload Material</h1>
             <form onSubmit={handleSubmit} className="bg-white p-6 rounded-lg shadow-md max-w-lg mx-auto">
                 <div className="mb-4">
                     <label className="block text-gray-700 font-semibold mb-2">
@@ -67,7 +72,7 @@ function UploadMaterial() {
                 </div>
                 <button
                     type="submit"
-                    className="w-full bg-yellow-600 text-white py-2 rounded-lg font-semibold hover:bg-yellow-700 transition duration-200"
+                    className="w-full bg-blue-600 text-white py-2 rounded-lg font-semibold hover:bg-blue-700 transition duration-200"
                 >
                     Upload Material
                 </button>

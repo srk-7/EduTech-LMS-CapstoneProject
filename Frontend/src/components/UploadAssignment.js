@@ -6,6 +6,8 @@ import { faFileAlt, faCalendarAlt, faFileUpload, faClipboardList } from '@fortaw
 import { ToastContainer, toast } from 'react-toastify'; // Import toast and ToastContainer
 import 'react-toastify/dist/ReactToastify.css'; // Import toastify styles
 
+import BackButton from './BackButton';
+
 function UploadAssignment() {
     const { classId: urlClassId } = useParams();
     const classId = urlClassId || localStorage.getItem('classId');
@@ -40,6 +42,9 @@ function UploadAssignment() {
 
     return (
         <div className="p-8 bg-gradient-to-r from-green-50 to-blue-100 min-h-screen">
+            <div className="mb-6">
+                    <BackButton />
+                </div>
             <h1 className="text-4xl font-bold mb-6 text-center text-blue-600">Upload Assignment</h1>
             <form onSubmit={handleSubmit} className="bg-white p-6 rounded-lg shadow-md max-w-lg mx-auto">
                 <div className="mb-4">

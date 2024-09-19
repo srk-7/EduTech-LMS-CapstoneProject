@@ -2,24 +2,15 @@
 export const getMaterialsForStudent = async (studentId) => {
     try {
         const response = await fetch(`http://localhost:8082/api/students/${studentId}/materials`);
-        
-        // Log the raw response object
-        console.log('Raw response:', response);
-  
         if (!response.ok) {
             throw new Error('Failed to fetch materials');
         }
-  
-        // Parse the response as JSON
         const data = await response.json();
-        
-        // Log the parsed JSON data
-        console.log('Parsed JSON data:', data);
-        
         return data;
-    } catch (error) {
+    } catch (error) 
+    {
         console.error('Error fetching materials:', error);
-        return []; // Return an empty array on error
+        return [];
     }
   };
   

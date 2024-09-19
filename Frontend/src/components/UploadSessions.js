@@ -6,6 +6,8 @@ import { faVideo, faClock, faCalendarAlt, faLink, faInfoCircle } from '@fortawes
 import { ToastContainer, toast } from 'react-toastify'; // Import toast and ToastContainer
 import 'react-toastify/dist/ReactToastify.css'; // Import toastify styles
 
+import BackButton from './BackButton';
+
 function UploadSession() {
     const { classId } = useParams();
     const navigate = useNavigate();
@@ -36,8 +38,11 @@ function UploadSession() {
     };
 
     return (
-        <div className="p-8 bg-gradient-to-r from-purple-50 to-pink-100 min-h-screen">
-            <h1 className="text-4xl font-bold mb-6 text-center text-purple-600">Create Session</h1>
+        <div className="p-8 bg-gradient-to-r from-green-50 to-blue-100 min-h-screen">
+            <div className="mb-6">
+                    <BackButton />
+            </div>
+            <h1 className="text-4xl font-bold mb-6 text-center text-blue-600">Create Session</h1>
             <form onSubmit={handleSubmit} className="bg-white p-6 rounded-lg shadow-md max-w-lg mx-auto space-y-4">
                 <div>
                     <label className="block text-gray-700 font-semibold mb-2">
@@ -103,7 +108,7 @@ function UploadSession() {
                 </div>
                 <button
                     type="submit"
-                    className="w-full bg-purple-600 text-white py-2 rounded-lg font-semibold hover:bg-purple-700 transition duration-200"
+                    className="w-full bg-blue-600 text-white py-2 rounded-lg font-semibold hover:bg-blue-700 transition duration-200"
                 >
                     Create Session
                 </button>

@@ -27,6 +27,7 @@ import DigitalLibrary from './components/DigitalLibrary';
 import StudentSubmitAssignment from './components/StudentSubmitAssignment';
 import ViewSubmissions from './components/ViewSubmissions';
 import AssignmentSubmissions from './components/AssignmentSubmissions';
+import NotFound from './components/NotFound';
 
 function App() {
     return (
@@ -64,6 +65,7 @@ function App() {
                 <Route path="/students/:studentId/submit-assignment" element={<StudentSubmitAssignment />} />
                 <Route path="/classes/:classId/view-submissions" element={<ViewSubmissions />} />
                 <Route path="/classes/:classId/assignments/:assignmentId/submissions" element={<AssignmentSubmissions />} />   
+                <Route path="*" element={<NotFound />} />
             </Routes>
         </Router>
     );

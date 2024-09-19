@@ -5,6 +5,8 @@ import { FaUserPlus, FaEnvelope, FaLock } from 'react-icons/fa'; // Icons for th
 import { toast, ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
+import BackButton from './BackButton';
+
 function AddStudent() {
     const { classId } = useParams(); // Get classId from the URL
     const [name, setName] = useState('');
@@ -30,7 +32,11 @@ function AddStudent() {
     return (
         <div className="min-h-screen bg-gradient-to-r from-indigo-500 to-blue-400 flex justify-center items-center">
             <ToastContainer />
+
             <form onSubmit={handleAddStudent} className="bg-white p-8 rounded-lg shadow-lg w-full max-w-md">
+                <div className="mb-6">
+                    <BackButton />
+                </div>
                 <h1 className="text-3xl font-bold mb-6 text-center text-indigo-600">Add Student to Class</h1>
 
                 {/* Name Input */}
