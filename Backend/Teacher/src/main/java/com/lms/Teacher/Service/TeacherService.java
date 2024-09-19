@@ -354,7 +354,7 @@ public class TeacherService {
      */
     public Student registerStudent(Student student) {
         Student registeredStudent = teacherServiceFeignClient.registerStudent(student);
-        sendRegistrationEmail(student.getEmail(), student.getPwd(), student.getClassName(), student.getName(), student.getStudentId());
+        sendRegistrationEmail(student.getEmail(), student.getPwd(), student.getClassName(), student.getName());
         return registeredStudent;
     }
 
@@ -365,15 +365,14 @@ public class TeacherService {
      * @param password The student's password
      * @param batch    The batch (class) name
      * @param name     The student's name
-     * @param id       The student's ID
      */
-    private void sendRegistrationEmail(String email, String password, String batch, String name, String id) {
+    private void sendRegistrationEmail(String email, String password, String batch, String name) {
         SimpleMailMessage mailMessage = new SimpleMailMessage();
         mailMessage.setFrom("edutech@lms.com");
         mailMessage.setTo(email);
         mailMessage.setSubject("Welcome to Edutech!");
         String emailContent = String.format(
-                "Dear %s (ID : %s),\n\n" +
+                "Dear %s ,\n\n" +
                         "You have been successfully added to Class: %s at Edutech. We are excited to have you on board!\n\n" +
                         "Here are your login credentials for accessing the Edutech Learning Management System (LMS):\n\n" +
                         " - Username: %s\n" +
@@ -381,7 +380,7 @@ public class TeacherService {
                         "You can access the LMS portal and start learning!\n\n" +
                         "Best Regards,\n" +
                         "Your LMS Team",
-                name, id, batch, email, password);
+                name, batch, email, password);
 
         mailMessage.setText(emailContent);
         javaMailSender.send(mailMessage);
@@ -402,7 +401,7 @@ public class TeacherService {
         student.setClassId(classId);
         student.setClassName(studentDto.getClassName());
 
-         sendRegistrationEmail(student.getEmail(), student.getPwd(), classId, student.getName(), student.getStudentId());
+         sendRegistrationEmail(student.getEmail(), student.getPwd(), classId, student.getName());
 
         return teacherServiceFeignClient.registerStudent(student);
     }
