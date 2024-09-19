@@ -354,7 +354,7 @@ public class TeacherService {
      */
     public Student registerStudent(Student student) {
         Student registeredStudent = teacherServiceFeignClient.registerStudent(student);
-        // sendRegistrationEmail(student.getEmail(), student.getPwd(), student.getClassName(), student.getName(), student.getStudentId());
+        sendRegistrationEmail(student.getEmail(), student.getPwd(), student.getClassName(), student.getName(), student.getStudentId());
         return registeredStudent;
     }
 
@@ -402,7 +402,7 @@ public class TeacherService {
         student.setClassId(classId);
         student.setClassName(studentDto.getClassName());
 
-         // sendRegistrationEmail(student.getEmail(), student.getPwd(), classId, student.getName(), student.getStudentId());
+         sendRegistrationEmail(student.getEmail(), student.getPwd(), classId, student.getName(), student.getStudentId());
 
         return teacherServiceFeignClient.registerStudent(student);
     }

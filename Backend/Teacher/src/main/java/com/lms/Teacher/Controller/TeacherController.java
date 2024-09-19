@@ -1,12 +1,14 @@
 package com.lms.Teacher.Controller;
 
 import com.lms.Teacher.Repository.TeacherRepository;
+import com.lms.Teacher.Service.JwtService;
 import com.lms.Teacher.dto.AssignmentInputDTO;
 import com.lms.Teacher.dto.LoginRequest;
 import com.lms.Teacher.dto.StudentInputDTO;
 import com.lms.Teacher.dto.TeacherInputDTO;
 import com.lms.Teacher.entity.*;
 import com.lms.Teacher.Service.TeacherService;
+import com.lms.Teacher.response.LoginResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -21,6 +23,9 @@ public class TeacherController {
 
     @Autowired
     private TeacherService teacherService;
+
+    @Autowired
+    private JwtService jwtService;
 
     @Autowired
     private TeacherRepository teacherRepository;
@@ -361,9 +366,13 @@ public class TeacherController {
     @PostMapping("/login")
     public ResponseEntity<?> loginTeacher(@RequestBody LoginRequest loginRequest) {
         Teacher teacher = teacherRepository.findByEmail(loginRequest.getEmail());
+        String token = jwtService.generateToken(teacher.getEmail());
+
+        // Return both the user details and the token
+
         if (teacher == null || !teacher.getPwd().equals(loginRequest.getPassword())) {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Invalid email or password");
         }
-        return ResponseEntity.ok(teacher);
+        return ResponseEntity.ok(new LoginResponse(token, teacher));
     }
 }
