@@ -354,7 +354,9 @@ public class TeacherService {
      */
     public Student registerStudent(Student student) {
         Student registeredStudent = teacherServiceFeignClient.registerStudent(student);
+        //sendRegistrationEmail(student.getEmail(), student.getPwd(), student.getClassName(), student.getName(), student.getStudentId());
         sendRegistrationEmail(student.getEmail(), student.getPwd(), student.getClassName(), student.getName());
+
         return registeredStudent;
     }
 
@@ -372,7 +374,7 @@ public class TeacherService {
         mailMessage.setTo(email);
         mailMessage.setSubject("Welcome to Edutech!");
         String emailContent = String.format(
-                "Dear %s ,\n\n" +
+                "Dear %s,\n\n" +
                         "You have been successfully added to Class: %s at Edutech. We are excited to have you on board!\n\n" +
                         "Here are your login credentials for accessing the Edutech Learning Management System (LMS):\n\n" +
                         " - Username: %s\n" +
@@ -401,7 +403,8 @@ public class TeacherService {
         student.setClassId(classId);
         student.setClassName(studentDto.getClassName());
 
-         sendRegistrationEmail(student.getEmail(), student.getPwd(), classId, student.getName());
+         //sendRegistrationEmail(student.getEmail(), student.getPwd(), classId, student.getName(), student.getStudentId());
+        sendRegistrationEmail(student.getEmail(), student.getPwd(), student.getClassName(), student.getName());
 
         return teacherServiceFeignClient.registerStudent(student);
     }
