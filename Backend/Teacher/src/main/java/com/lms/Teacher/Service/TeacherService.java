@@ -354,8 +354,7 @@ public class TeacherService {
      */
     public Student registerStudent(Student student) {
         Student registeredStudent = teacherServiceFeignClient.registerStudent(student);
-        //sendRegistrationEmail(student.getEmail(), student.getPwd(), student.getClassName(), student.getName(), student.getStudentId());
-        sendRegistrationEmail(student.getEmail(), student.getPwd(), student.getClassName(), student.getName());
+        sendRegistrationEmail(student.getEmail(), student.getPwd(), student.getClassName(), student.getName(), student.getStudentId());
 
         return registeredStudent;
     }
@@ -368,7 +367,7 @@ public class TeacherService {
      * @param batch    The batch (class) name
      * @param name     The student's name
      */
-    private void sendRegistrationEmail(String email, String password, String batch, String name) {
+    private void sendRegistrationEmail(String email, String password, String batch, String name, String id) {
         SimpleMailMessage mailMessage = new SimpleMailMessage();
         mailMessage.setFrom("edutech@lms.com");
         mailMessage.setTo(email);
@@ -403,8 +402,7 @@ public class TeacherService {
         student.setClassId(classId);
         student.setClassName(studentDto.getClassName());
 
-         //sendRegistrationEmail(student.getEmail(), student.getPwd(), classId, student.getName(), student.getStudentId());
-        sendRegistrationEmail(student.getEmail(), student.getPwd(), student.getClassName(), student.getName());
+        sendRegistrationEmail(student.getEmail(), student.getPwd(), classId, student.getName(), student.getStudentId());
 
         return teacherServiceFeignClient.registerStudent(student);
     }
